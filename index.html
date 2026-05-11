@@ -1,213 +1,738 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#071f54" />
-  <title>중앙회노조 ON - 선거 홍보 웹앱</title>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>조합원이 바로 보는 노동조합</title>
+<style>
+:root{
+  --bg:#f3f6ff;
+  --surface:#ffffff;
+  --ink:#111827;
+  --muted:#667085;
+  --blue:#1746a2;
+  --blue2:#0b2f74;
+  --sky:#eaf2ff;
+  --yellow:#ffd84d;
+  --green:#0f9f6e;
+  --red:#ef4444;
+  --line:#d8e2f3;
+  --shadow:0 16px 36px rgba(23,70,162,.14);
+  --radius:24px;
+  --fontScale:1;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  padding:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  font-size:calc(16px * var(--fontScale));
+}
+body{padding-bottom:86px}
+button,input,textarea,select{font:inherit}
+button{border:0;cursor:pointer}
+a{text-decoration:none;color:inherit}
+.app{max-width:760px;margin:0 auto;min-height:100vh;background:linear-gradient(180deg,#f7f9ff 0%,#eef4ff 100%)}
+.view{display:none}
+.view.active{display:block}
+.hero{
+  padding:24px 18px 22px;
+  background:
+    radial-gradient(circle at 88% 0%, rgba(255,216,77,.28) 0 90px, transparent 92px),
+    linear-gradient(145deg,var(--blue2),var(--blue));
+  color:white;
+  border-radius:0 0 34px 34px;
+  box-shadow:0 14px 30px rgba(11,47,116,.22);
+}
+.top-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.28);
+  font-size:.82rem;
+  font-weight:900;
+}
+.hero h1{
+  margin:16px 0 9px;
+  font-size:2rem;
+  line-height:1.12;
+  letter-spacing:-.06em;
+}
+.hero p{
+  margin:0;
+  color:rgba(255,255,255,.9);
+  line-height:1.52;
+  font-size:1.02rem;
+  font-weight:650;
+}
+.hero-quick{
+  margin-top:18px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.btn{
+  min-height:50px;
+  border-radius:17px;
+  padding:13px 12px;
+  font-weight:950;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  text-align:center;
+}
+.btn.primary{background:var(--yellow);color:#18181b}
+.btn.ghost{background:rgba(255,255,255,.14);color:white;border:1px solid rgba(255,255,255,.35)}
+.btn.blue{background:var(--blue);color:white}
+.btn.soft{background:var(--sky);color:var(--blue)}
+.section{padding:16px}
+.section-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  margin:10px 0 12px;
+}
+.section-head h2{
+  margin:0;
+  font-size:1.28rem;
+  letter-spacing:-.04em;
+}
+.section-head span{
+  color:var(--muted);
+  font-size:.82rem;
+  font-weight:850;
+}
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:16px;
+  margin:12px 0;
+}
+.card.flat{box-shadow:none}
+.kicker{
+  color:var(--blue);
+  font-size:.76rem;
+  font-weight:1000;
+  letter-spacing:.04em;
+  margin-bottom:7px;
+}
+.headline{
+  font-size:1.32rem;
+  line-height:1.25;
+  font-weight:1000;
+  letter-spacing:-.05em;
+}
+.copy{
+  color:var(--muted);
+  line-height:1.5;
+  font-size:.95rem;
+  margin-top:8px;
+  font-weight:650;
+}
+.keyword-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{
+  border-radius:999px;
+  padding:8px 10px;
+  background:#eef4ff;
+  color:#173f98;
+  border:1px solid #d8e6ff;
+  font-size:.84rem;
+  font-weight:950;
+}
+.summary-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.summary{
+  border-radius:21px;
+  background:#fff;
+  border:1px solid var(--line);
+  padding:14px;
+  min-height:112px;
+}
+.summary b{display:block;font-size:1.04rem;letter-spacing:-.03em}
+.summary p{margin:7px 0 0;color:var(--muted);font-size:.88rem;line-height:1.42;font-weight:650}
+.promise-strip{
+  display:flex;
+  gap:10px;
+  overflow:auto;
+  padding:2px 0 8px;
+  scroll-snap-type:x mandatory;
+}
+.promise-strip .promise-mini{
+  scroll-snap-align:start;
+  min-width:78%;
+}
+.promise-mini{
+  position:relative;
+  overflow:hidden;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:22px;
+  box-shadow:var(--shadow);
+  padding:16px;
+}
+.promise-mini .num{
+  position:absolute;
+  top:10px;
+  right:13px;
+  color:#dce7ff;
+  font-size:2rem;
+  font-weight:1000;
+}
+.promise-mini h3{
+  margin:2px 42px 8px 0;
+  font-size:1.1rem;
+  line-height:1.28;
+  letter-spacing:-.04em;
+}
+.promise-mini p{
+  margin:0;
+  color:var(--muted);
+  font-size:.9rem;
+  line-height:1.45;
+  font-weight:650;
+}
+.promise-mini button{margin-top:12px;width:100%}
+.filter-wrap{
+  position:sticky;
+  top:0;
+  z-index:5;
+  background:rgba(243,246,255,.96);
+  backdrop-filter:blur(12px);
+  padding:12px 16px 6px;
+  border-bottom:1px solid rgba(216,226,243,.7);
+}
+.filters{
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  padding-bottom:6px;
+}
+.filters button{
+  white-space:nowrap;
+  border-radius:999px;
+  padding:9px 13px;
+  background:white;
+  border:1px solid var(--line);
+  color:#344054;
+  font-weight:950;
+}
+.filters button.active{background:var(--blue);color:white;border-color:var(--blue)}
+.promise-full{
+  overflow:hidden;
+}
+.promise-top{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+.promise-badge{
+  flex:0 0 44px;
+  height:44px;
+  border-radius:15px;
+  background:var(--blue);
+  color:white;
+  display:grid;
+  place-items:center;
+  font-weight:1000;
+}
+.promise-title h3{margin:0;font-size:1.16rem;line-height:1.28;letter-spacing:-.04em}
+.promise-title p{margin:7px 0 0;color:var(--muted);font-size:.9rem;line-height:1.45;font-weight:650}
+.accordion{
+  margin-top:12px;
+  display:grid;
+  gap:8px;
+}
+.acc-item{
+  border:1px solid #e2eaf7;
+  background:#f8fbff;
+  border-radius:16px;
+  overflow:hidden;
+}
+.acc-title{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:transparent;
+  padding:12px;
+  font-weight:1000;
+  color:#152033;
+}
+.acc-content{
+  display:none;
+  padding:0 12px 13px;
+  color:#475467;
+  line-height:1.48;
+  font-size:.92rem;
+  font-weight:650;
+}
+.acc-item.open .acc-content{display:block}
+.timeline{display:grid;gap:9px}
+.step{
+  display:grid;
+  grid-template-columns:68px 1fr;
+  gap:10px;
+  align-items:start;
+  background:#f8fbff;
+  border:1px solid #e2eaf7;
+  border-radius:16px;
+  padding:11px;
+}
+.step b{color:var(--blue);font-size:.9rem}
+.step div{color:#344054;font-size:.93rem;line-height:1.42;font-weight:700}
+.progress-box{
+  border-radius:20px;
+  background:linear-gradient(180deg,#fff,#f7faff);
+  border:1px solid var(--line);
+  padding:14px;
+}
+.progress-row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+}
+.progress-row b{font-size:1rem}
+.progress-row span{font-weight:1000;color:var(--blue)}
+.bar{
+  height:12px;
+  background:#e6eefb;
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:11px;
+}
+.bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--blue),var(--green))}
+.admin-panel{
+  background:#0f172a;
+  color:white;
+  border-radius:24px;
+  padding:16px;
+}
+.field{display:grid;gap:7px;margin:12px 0}
+.field label{font-size:.88rem;font-weight:950;color:inherit}
+input,textarea,select{
+  width:100%;
+  border:1px solid #cfd9eb;
+  background:white;
+  color:#101828;
+  border-radius:14px;
+  padding:12px;
+  outline:none;
+}
+textarea{min-height:86px;resize:vertical}
+.admin-tabs{
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  padding:4px 0 10px;
+}
+.admin-tabs button{
+  white-space:nowrap;
+  border-radius:999px;
+  padding:10px 13px;
+  background:#eaf2ff;
+  color:var(--blue);
+  font-weight:950;
+}
+.admin-tabs button.active{background:var(--blue);color:white}
+.admin-box{display:none}
+.admin-box.active{display:block}
+.admin-item{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:14px;
+  margin:12px 0;
+}
+.admin-item .field label{color:#1f2937}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.small{
+  border-radius:12px;
+  padding:10px 12px;
+  background:#eef4ff;
+  color:var(--blue);
+  font-weight:950;
+}
+.small.dark{background:#111827;color:white}
+.small.danger{background:#fff1f2;color:#be123c}
+.nav{
+  position:fixed;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:0;
+  width:100%;
+  max-width:760px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:4px;
+  background:rgba(255,255,255,.97);
+  border-top:1px solid var(--line);
+  backdrop-filter:blur(16px);
+  padding:7px 6px calc(7px + env(safe-area-inset-bottom));
+  z-index:30;
+}
+.nav button{
+  background:transparent;
+  color:#667085;
+  border-radius:15px;
+  padding:8px 2px;
+  font-size:.73rem;
+  font-weight:950;
+}
+.nav button.active{background:#eaf2ff;color:var(--blue)}
+.nav b{display:block;font-size:1.18rem;line-height:1}
+.toast{
+  display:none;
+  position:fixed;
+  left:16px;
+  right:16px;
+  bottom:96px;
+  background:#111827;
+  color:white;
+  border-radius:16px;
+  padding:13px;
+  text-align:center;
+  font-weight:950;
+  z-index:99;
+}
+@media(max-width:420px){
+  .hero h1{font-size:1.78rem}
+  .hero-quick{grid-template-columns:1fr}
+  .section{padding:14px}
+  .summary-grid{grid-template-columns:1fr 1fr}
+  .headline{font-size:1.2rem}
+  .promise-strip .promise-mini{min-width:84%}
+}
+@media(min-width:700px){
+  .promise-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .promise-grid .card{margin:0}
+  .promise-strip .promise-mini{min-width:42%}
+}
+</style>
 </head>
 <body>
-  <div class="app-shell">
-    <aside class="sidebar" aria-label="주 메뉴">
-      <div class="brand">
-        <div class="brand-mark">ON</div>
-        <div>
-          <strong id="brandName"></strong>
-          <span id="brandSub"></span>
+<div class="app">
+
+  <main id="home" class="view active">
+    <header class="hero">
+      <div class="top-pill">모바일 공약집 · 실시간 소통</div>
+      <h1 id="heroTitle">조합원이 바로 보는 노동조합</h1>
+      <p id="heroSubtitle">듣고, 확인하고, 실행하고, 공개하겠습니다.</p>
+      <div class="hero-quick">
+        <button class="btn primary" onclick="showView('promises')">공약 자세히 보기</button>
+        <button class="btn ghost" onclick="showView('opinion')">의견 남기기</button>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="card">
+        <div class="kicker">핵심 방향</div>
+        <div class="headline">공약을 먼저 보여주고,<br>단계별 실행계획으로 증명하겠습니다.</div>
+        <div class="keyword-row" id="keywordRow"></div>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary"><b>청취</b><p>상시 의견 접수</p></div>
+        <div class="summary"><b>설계</b><p>30일·100일·6개월 계획</p></div>
+        <div class="summary"><b>공개</b><p>공약·교섭 진행상황 공개</p></div>
+        <div class="summary"><b>개선</b><p>의견을 제도개선으로 연결</p></div>
+      </div>
+
+      <div class="section-head">
+        <h2>7대 공약 미리보기</h2>
+        <span>좌우로 넘겨보기</span>
+      </div>
+      <div class="promise-strip" id="homePromises"></div>
+
+      <button class="btn blue" style="width:100%;margin-top:6px" onclick="showView('promises')">전체 공약 단계별로 보기</button>
+    </section>
+  </main>
+
+  <main id="promises" class="view">
+    <div class="filter-wrap">
+      <div class="section-head" style="margin:0 0 10px">
+        <h2>공약 자세히 보기</h2>
+        <span>문제·약속·단계</span>
+      </div>
+      <div class="filters" id="filters"></div>
+    </div>
+    <section class="section">
+      <div class="card">
+        <div class="kicker">공약 구성 방식</div>
+        <div class="headline">문제 → 약속 → 실행단계 → 측정지표</div>
+        <div class="copy">투표권자가 실제 공약의 내용과 실행 가능성을 바로 확인할 수 있게 구성했습니다.</div>
+      </div>
+      <div id="promiseList" class="promise-grid"></div>
+    </section>
+  </main>
+
+  <main id="roadmap" class="view">
+    <section class="section">
+      <div class="section-head"><h2>단계별 실행계획</h2><span>바로 실행</span></div>
+      <div class="card">
+        <div class="kicker">로드맵</div>
+        <div class="headline">당선 즉시부터 1년까지,<br>무엇을 할지 공개합니다.</div>
+      </div>
+      <div class="card"><div class="timeline" id="roadmapList"></div></div>
+    </section>
+  </main>
+
+  <main id="progress" class="view">
+    <section class="section">
+      <div class="section-head"><h2>공약 준비·이행률</h2><span>숫자로 확인</span></div>
+      <div class="card">
+        <div class="kicker">전체 현황</div>
+        <div class="headline"><span id="avgProgress">0%</span> 준비</div>
+        <div class="copy">선거 준비 단계에서는 공약 설계, 자료정리, 의견수렴 준비율을 중심으로 공개합니다.</div>
+        <div class="bar"><i id="avgBar"></i></div>
+      </div>
+      <div id="progressList"></div>
+    </section>
+  </main>
+
+  <main id="opinion" class="view">
+    <section class="section">
+      <div class="section-head"><h2>의견광장</h2><span>상시 접수</span></div>
+      <div class="card">
+        <div class="kicker">소통 원칙</div>
+        <div class="headline" id="opinionTitle">의견은 듣는 것으로 끝내지 않겠습니다.</div>
+        <div class="copy" id="opinionDesc">접수된 의견은 검토 후 공약과 교섭 요구안에 반영 여부를 공개하겠습니다.</div>
+        <div class="hero-quick" style="grid-template-columns:1fr;margin-top:14px">
+          <a id="formLink" class="btn blue" target="_blank" rel="noopener">의견 남기기</a>
+          <a id="sheetLink" class="btn soft" target="_blank" rel="noopener" style="display:none">관리자 의견 확인</a>
         </div>
       </div>
-      <nav class="side-nav">
-        <button class="nav active" data-view="home">홈</button>
-        <button class="nav" data-view="transfer">전보</button>
-        <button class="nav" data-view="hr">인사·승진</button>
-        <button class="nav" data-view="committee">위원회</button>
-        <button class="nav" data-view="live">교섭 라이브</button>
-        <button class="nav" data-view="voice">의견광장</button>
-        <button class="nav" data-view="pledges">이행률</button>
-        <button class="nav" data-view="admin">관리자</button>
-      </nav>
-      <div class="consult-box">
-        <strong>언제든 말할 수 있는 공간</strong>
-        <p>전보·인사·승진·업무고충을 안전하게 남겨주세요.</p>
-        <button data-open-voice>의견 남기기</button>
+      <div class="card">
+        <div class="kicker">처리 흐름</div>
+        <div class="timeline">
+          <div class="step"><b>접수</b><div>전보·인사·복지·근무조건 의견 제출</div></div>
+          <div class="step"><b>검토</b><div>담당자와 위원회가 분류·검토</div></div>
+          <div class="step"><b>반영</b><div>공약·교섭안·활동계획 반영 여부 판단</div></div>
+          <div class="step"><b>공개</b><div>진행상황과 결과를 웹앱에 공개</div></div>
+        </div>
       </div>
-    </aside>
+    </section>
+  </main>
 
-    <main>
-      <header class="topbar">
-        <button class="hamburger" id="menuToggle" aria-label="메뉴 열기">☰</button>
-        <div>
-          <p class="eyebrow" id="eyebrow"></p>
-          <h1 id="mainTitle"></h1>
+  <main id="admin" class="view">
+    <section class="section">
+      <div class="section-head"><h2>관리자 모드</h2><span>비밀번호 2026</span></div>
+      <div id="loginBox" class="admin-panel">
+        <div class="headline">관리자 로그인</div>
+        <div class="field"><label>비밀번호</label><input type="password" id="pw" placeholder="2026"></div>
+        <button class="btn primary" onclick="login()">입장하기</button>
+      </div>
+      <div id="adminContent" style="display:none">
+        <div class="admin-tabs" id="adminTabs"></div>
+        <div id="adminHome" class="admin-box active"></div>
+        <div id="adminPromises" class="admin-box"></div>
+        <div id="adminRoadmap" class="admin-box"></div>
+        <div id="adminOpinion" class="admin-box"></div>
+        <div id="adminTheme" class="admin-box"></div>
+        <div class="row" style="margin-top:14px">
+          <button class="small dark" onclick="copyBackup()">백업 복사</button>
+          <button class="small" onclick="restoreBackup()">백업 복원</button>
+          <button class="small danger" onclick="resetAll()">초기화</button>
         </div>
-        <button class="admin-quick" data-view-jump="admin">관리자</button>
-      </header>
+      </div>
+    </section>
+  </main>
+</div>
 
-      <section class="campaign-hero" id="homeHero">
-        <div class="hero-copy">
-          <div class="slogan-chip" id="heroChip"></div>
-          <h2 id="heroTitle"></h2>
-          <p id="heroText"></p>
-          <div class="hero-actions">
-            <button class="primary" data-view-jump="voice">지금 의견 남기기</button>
-            <button class="secondary" data-view-jump="pledges">이행률 보기</button>
-          </div>
-        </div>
-        <div class="hero-score-card">
-          <p class="mini-label">공약 이행률</p>
-          <strong id="overallPercent">0%</strong>
-          <div class="big-bar"><span id="overallBar"></span></div>
-          <p id="overallText"></p>
-          <button class="white-btn" data-view-jump="pledges">세부 이행률 확인</button>
-        </div>
-      </section>
+<nav class="nav">
+  <button data-view="home" class="active" onclick="showView('home')"><b>⌂</b>홈</button>
+  <button data-view="promises" onclick="showView('promises')"><b>✓</b>공약</button>
+  <button data-view="roadmap" onclick="showView('roadmap')"><b>↗</b>계획</button>
+  <button data-view="progress" onclick="showView('progress')"><b>%</b>이행률</button>
+  <button data-view="admin" onclick="showView('admin')"><b>⚙</b>관리</button>
+</nav>
+<div id="toast" class="toast"></div>
 
-      <section class="view active" id="view-home">
-        <div class="one-page-summary">
-          <div class="summary-head">
-            <span>한 장 요약</span>
-            <h2 id="summaryTitle"></h2>
-            <p id="summaryLead"></p>
-          </div>
-          <div class="summary-grid" id="summaryCards"></div>
-        </div>
-
-        <div class="section-head compact">
-          <h2>핵심 전략</h2>
-          <p>듣고, 측정하고, 설계하고, 실행하고, 공개하고, 개선하겠습니다.</p>
-        </div>
-        <div class="grid three" id="strategyCards"></div>
-
-        <div class="panel split">
-          <div>
-            <h2>100일 실행 로드맵</h2>
-            <ul class="timeline" id="roadmapList"></ul>
-          </div>
-          <div>
-            <h2>공개 지표</h2>
-            <div class="metrics" id="metricsList"></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="view" id="view-transfer">
-        <div class="section-head">
-          <h2 id="transferTitle"></h2>
-          <p id="transferLead"></p>
-        </div>
-        <div class="grid two" id="transferPromises"></div>
-      </section>
-
-      <section class="view" id="view-hr">
-        <div class="section-head">
-          <h2 id="hrTitle"></h2>
-          <p id="hrLead"></p>
-        </div>
-        <div class="grid two" id="hrPromises"></div>
-      </section>
-
-      <section class="view" id="view-committee">
-        <div class="section-head">
-          <h2 id="committeeTitle"></h2>
-          <p id="committeeLead"></p>
-        </div>
-        <div class="grid two" id="committeeList"></div>
-      </section>
-
-      <section class="view" id="view-live">
-        <div class="section-head">
-          <h2 id="liveTitle"></h2>
-          <p id="liveLead"></p>
-        </div>
-        <div class="live-board" id="liveBoard"></div>
-      </section>
-
-      <section class="view" id="view-voice">
-        <div class="section-head">
-          <h2 id="voiceTitle"></h2>
-          <p id="voiceLead"></p>
-        </div>
-        <div id="externalVoiceBox" class="external-voice-box hidden"></div>
-        <form id="voiceForm" class="voice-form">
-          <label>분류
-            <select id="voiceCategory">
-              <option>전보 고충</option>
-              <option>인사·평가</option>
-              <option>승진 기준</option>
-              <option>위원회 제안</option>
-              <option>교섭 의제</option>
-              <option>조합 운영</option>
-              <option>긴급 상담</option>
-              <option>자유 의견</option>
-            </select>
-          </label>
-          <label>공개 범위
-            <select id="voiceScope">
-              <option>익명 제안</option>
-              <option>비공개 상담</option>
-              <option>공개 제안</option>
-            </select>
-          </label>
-          <label>의견 내용
-            <textarea id="voiceText" maxlength="800" placeholder="전보, 인사, 승진, 위원회 제안, 조합 운영 등 무엇이든 남겨주세요." required></textarea>
-          </label>
-          <button class="primary" type="submit">의견 보내기</button>
-        </form>
-        <div class="sub-panel">
-          <h3>접수된 의견</h3>
-          <div id="voiceList"></div>
-        </div>
-      </section>
-
-      <section class="view" id="view-pledges">
-        <div class="section-head pledge-header">
-          <div>
-            <h2 id="pledgeTitle"></h2>
-            <p id="pledgeLead"></p>
-          </div>
-          <div class="pledge-total">
-            <span>전체 이행률</span>
-            <strong id="pledgeTotalText">0%</strong>
-          </div>
-        </div>
-        <div id="pledgeList"></div>
-      </section>
-
-      <section class="view" id="view-admin">
-        <div class="section-head">
-          <h2>관리자 모드</h2>
-          <p>비밀번호 입력 후 화면에 보이는 문구와 카드를 직접 수정할 수 있습니다. 코드 작업이 필요 없습니다.</p>
-        </div>
-        <div id="loginBox" class="admin-box">
-          <input id="adminPw" type="password" inputmode="numeric" placeholder="관리자 비밀번호" />
-          <button class="primary" id="loginBtn">관리자 로그인</button>
-        </div>
-        <div id="adminPanel" class="admin-panel hidden">
-          <div class="admin-toolbar">
-            <strong>수정할 화면 선택</strong>
-            <div class="admin-tabs" id="adminTabs"></div>
-          </div>
-          <div id="adminEditor"></div>
-          <div class="admin-actions sticky-actions">
-            <button class="primary" id="saveAdmin">저장하기</button>
-            <button class="secondary" id="previewHome">홈 미리보기</button>
-            <button class="danger" id="resetData">초기화</button>
-          </div>
-          <p class="hint">현재 버전은 브라우저에 저장됩니다. 같은 내용을 여러 기기에서 공유하려면 GitHub Pages, Netlify, Firebase, Supabase, Google Sheets 연동형으로 확장하면 됩니다.</p>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <nav class="bottom-nav" aria-label="모바일 하단 메뉴">
-    <button class="mobile-nav active" data-view="home">홈</button>
-    <button class="mobile-nav" data-view="pledges">이행률</button>
-    <button class="mobile-nav" data-view="live">라이브</button>
-    <button class="mobile-nav" data-view="voice">의견</button>
-    <button class="mobile-nav" data-view="admin">관리</button>
-  </nav>
-
-  <script src="app.js"></script>
+<script>
+const DEFAULT = {
+  heroTitle:"조합원이 바로 보는 노동조합",
+  heroSubtitle:"듣고, 확인하고, 실행하고, 공개하겠습니다.",
+  keywords:["청취","측정","설계","실행","공개","개선"],
+  formUrl:"",
+  sheetUrl:"",
+  opinionTitle:"의견은 듣는 것으로 끝내지 않겠습니다.",
+  opinionDesc:"접수된 의견은 검토 후 공약과 교섭 요구안에 반영 여부를 공개하겠습니다.",
+  theme:{blue:"#1746a2",blue2:"#0b2f74",yellow:"#ffd84d",fontScale:1},
+  roadmap:[
+    {time:"즉시",text:"웹앱 공개, 의견 접수창구 개설, 조합 운영 공개 원칙 선언"},
+    {time:"30일",text:"전보·인사·평가, 복지, 지역근무, 업무량 실태조사"},
+    {time:"60일",text:"접수 의견 분류, 주요 고충 유형 분석, 위원회 구성 착수"},
+    {time:"100일",text:"공약별 1차 개선안 발표, 공약 준비·이행률 1차 공개"},
+    {time:"6개월",text:"전보·평가·복지·위원회 관련 핵심 요구안 교섭 추진"},
+    {time:"1년",text:"공약 이행률 종합보고, 제도개선 성과와 미이행 과제 공개"}
+  ],
+  promises:[
+    {cat:"전보",title:"합리적 전보 기준 공개 및 생활영향 심사제",short:"무분별한 전보를 줄이고, 설명 가능한 절차를 만들겠습니다.",problem:"전보는 조직 운영의 수단일 수 있지만 직원에게는 생활, 가족, 주거, 통근, 건강, 경력의 문제입니다. 기준과 절차가 충분히 설명되지 않을 때 불신이 커집니다.",promise:"전보 기준 공개, 사전예고제, 생활영향 심사, 이의제기 및 재검토 절차를 요구하겠습니다.",steps:["30일 내 전보 관련 고충 및 불만 유형 익명 조사","60일 내 전보 생활영향 항목 정리","100일 내 합리적 전보 기준 개선안 발표","6개월 내 전보 사전예고제와 이의제기 절차 교섭 요구","1년 내 전보 운영현황 조합원 보고서 발간"],metrics:["전보 고충 접수 건수","고충 처리율","평균 처리기간","이의제기 반영 건수","전보 만족도 변화"],progress:15},
+    {cat:"인사",title:"인사·평가·승진 공정성 검증 시스템",short:"평가와 승진은 결과보다 과정이 신뢰받아야 합니다.",problem:"평가·승진·보직 기준이 충분히 설명되지 않으면 공정성 불신이 반복됩니다.",promise:"평가 기준 설명 강화, 평가 피드백권, 이의제기 절차, 승진·보직 고충창구를 추진하겠습니다.",steps:["30일 내 평가·승진 관련 조합원 설문","100일 내 공정성 개선과제 발표","6개월 내 평가 피드백권 및 이의제기 절차 교섭 요구","1년 내 승진·평가 제도개선 노사협의체 추진"],metrics:["평가 피드백 제공률","평가·승진 고충 접수 건수","처리율","제도개선 반영 건수","평가제도 만족도 변화"],progress:10},
+    {cat:"복지",title:"세대별 생애주기 복지제도",short:"세대와 삶의 단계에 맞는 복지를 만들겠습니다.",problem:"우리 조직은 20대 후반부터 50대 중반까지 다양한 세대가 함께 일합니다. 세대가 다르면 필요한 복지도 다릅니다.",promise:"청년·육아·중견·경력후반 직원별 복지수요를 조사하고 선택형 복지를 개편하겠습니다.",steps:["세대별 복지 수요조사 실시","선택형 복지 항목 개편 요구","복지 이용률 및 만족도 공개","신규 복지 제안 접수 및 반영 여부 공개"],metrics:["세대별 복지 만족도","복지 항목별 이용률","신규 복지 제안 건수","제안 반영률","미사용 복지포인트 비율"],progress:12},
+    {cat:"지역",title:"지역근무 생활안정 지원 패키지",short:"전국 어디서 일하든 같은 보호를 받을 수 있게 하겠습니다.",problem:"전국 13개 지역에 분포된 조직에서는 지역근무와 이동에 따른 생활부담이 발생합니다.",promise:"주거·교통·정착 부담, 가족동반·단신부임, 건강·심리 지원 등 지역근무 생활안정 방안을 요구하겠습니다.",steps:["지역근무 고충 접수 및 정기 분석","지역별 온라인 간담회 개최","생활안정 지원기준 마련 요구","장기 지역근무자 희망 반영 절차 요구"],metrics:["지역근무 고충 접수 건수","처리율","지역별 간담회 개최 횟수","생활안정 지원 반영 건수","지역근무 만족도 변화"],progress:8},
+    {cat:"근무",title:"업무량 측정 기반 근무조건 개선",short:"일이 많다는 말만 반복하지 않고 숫자로 개선하겠습니다.",problem:"업무량 증가, 초과근로, 휴가 사용 어려움은 체감되지만 제도 개선으로 연결되기 어렵습니다.",promise:"부서별 초과근로, 휴가사용률, 업무집중 시기를 측정해 근무조건 개선과 대체인력 요구로 연결하겠습니다.",steps:["부서별 초과근로 현황 익명 통계화","휴가 사용률 점검","업무 집중 시기 조사","대체인력 필요 부서 파악","직무스트레스 및 번아웃 대응 요구"],metrics:["초과근로 추이","휴가사용률","업무량 고충 접수 건수","대체인력 반영 건수","직무스트레스 조사 결과"],progress:10},
+    {cat:"위원회",title:"조합원 참여형 위원회 설치",short:"주제별·세대별·지역별 의견을 구조적으로 듣겠습니다.",problem:"한두 사람이 듣는 방식으로는 다양한 세대와 지역의 의견을 충분히 반영하기 어렵습니다.",promise:"인사·전보 공정성, 세대공존·복지, 지역근무·생활안정, 근무조건·업무량, 소통·공개 혁신 위원회를 운영하겠습니다.",steps:["60일 내 위원회 구성 착수","분기별 회의 운영","웹앱을 통한 상시 제안 접수","위원회별 활동보고 공개","단체교섭 반영 여부 공개"],metrics:["위원회별 접수 의견 수","검토 완료율","제도개선 반영 건수","회의 개최 횟수","활동보고 공개 횟수"],progress:5},
+    {cat:"소통",title:"실시간 공개·소통 웹앱 운영",short:"공약, 교섭, 의견, 위원회, 이행률을 모바일에서 바로 보게 하겠습니다.",problem:"결과만 전달되면 조합원은 과정과 진행상황을 알기 어렵습니다.",promise:"웹앱으로 공약 상세, 교섭 진행, 의견접수, 위원회 활동, 이행률을 공개하겠습니다.",steps:["당선 즉시 웹앱 기본 운영","Google Form/Sheet 의견수렴 연동","공약별 진행상태 업데이트","월 1회 공약 이행률 공개","반영하지 못한 의견도 사유 공개"],metrics:["공약별 업데이트 횟수","의견 접수 건수","처리상태 공개 건수","공약 이행률","조합원 접속·참여 지표"],progress:35}
+  ]
+};
+let state=load(), filter="전체";
+function load(){try{return JSON.parse(localStorage.getItem("unionAppV9"))||structuredClone(DEFAULT)}catch(e){return structuredClone(DEFAULT)}}
+function persist(){localStorage.setItem("unionAppV9",JSON.stringify(state));render();toast("저장되었습니다")}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]))}
+function showView(id){
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===id));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function toast(msg){let t=document.getElementById("toast");t.textContent=msg;t.style.display="block";setTimeout(()=>t.style.display="none",1700)}
+function theme(){
+  document.documentElement.style.setProperty("--blue",state.theme.blue);
+  document.documentElement.style.setProperty("--blue2",state.theme.blue2);
+  document.documentElement.style.setProperty("--yellow",state.theme.yellow);
+  document.documentElement.style.setProperty("--fontScale",state.theme.fontScale||1);
+}
+function render(){
+  theme();
+  document.getElementById("heroTitle").textContent=state.heroTitle;
+  document.getElementById("heroSubtitle").textContent=state.heroSubtitle;
+  document.getElementById("keywordRow").innerHTML=state.keywords.map(k=>`<span class="chip">${esc(k)}</span>`).join("");
+  renderHomePromises(); renderPromises(); renderRoadmap(); renderProgress(); renderOpinion(); renderAdmin();
+}
+function miniCard(p,i){
+  return `<div class="promise-mini">
+    <div class="num">${i+1}</div>
+    <div class="kicker">${esc(p.cat)}</div>
+    <h3>${esc(p.title)}</h3>
+    <p>${esc(p.short)}</p>
+    <button class="btn soft" onclick="showView('promises');filter='${esc(p.cat)}';renderPromises()">자세히 보기</button>
+  </div>`;
+}
+function renderHomePromises(){
+  document.getElementById("homePromises").innerHTML=state.promises.map((p,i)=>miniCard(p,i)).join("");
+}
+function fullCard(p,i){
+  return `<div class="card promise-full">
+    <div class="promise-top">
+      <div class="promise-badge">${i+1}</div>
+      <div class="promise-title">
+        <div class="kicker">${esc(p.cat)}</div>
+        <h3>${esc(p.title)}</h3>
+        <p>${esc(p.short)}</p>
+      </div>
+    </div>
+    <div class="accordion">
+      <div class="acc-item open"><button class="acc-title" onclick="acc(this)">문제 인식 <span>⌄</span></button><div class="acc-content">${esc(p.problem)}</div></div>
+      <div class="acc-item"><button class="acc-title" onclick="acc(this)">핵심 약속 <span>⌄</span></button><div class="acc-content">${esc(p.promise)}</div></div>
+      <div class="acc-item"><button class="acc-title" onclick="acc(this)">단계별 실행계획 <span>⌄</span></button><div class="acc-content"><div class="timeline">${(p.steps||[]).map((s,j)=>`<div class="step"><b>${j+1}단계</b><div>${esc(s)}</div></div>`).join("")}</div></div></div>
+      <div class="acc-item"><button class="acc-title" onclick="acc(this)">측정지표 <span>⌄</span></button><div class="acc-content"><div class="keyword-row">${(p.metrics||[]).map(m=>`<span class="chip">${esc(m)}</span>`).join("")}</div></div></div>
+    </div>
+  </div>`;
+}
+function acc(btn){btn.parentElement.classList.toggle("open")}
+function renderPromises(){
+  const cats=["전체",...Array.from(new Set(state.promises.map(p=>p.cat)))];
+  document.getElementById("filters").innerHTML=cats.map(c=>`<button class="${filter===c?'active':''}" onclick="filter='${esc(c)}';renderPromises()">${esc(c)}</button>`).join("");
+  const list=state.promises.filter(p=>filter==="전체"||p.cat===filter);
+  document.getElementById("promiseList").innerHTML=list.map(p=>fullCard(p,state.promises.indexOf(p))).join("");
+}
+function renderRoadmap(){
+  document.getElementById("roadmapList").innerHTML=state.roadmap.map(r=>`<div class="step"><b>${esc(r.time)}</b><div>${esc(r.text)}</div></div>`).join("");
+}
+function renderProgress(){
+  const avg=Math.round(state.promises.reduce((a,p)=>a+(+p.progress||0),0)/Math.max(1,state.promises.length));
+  document.getElementById("avgProgress").textContent=avg+"%";
+  document.getElementById("avgBar").style.width=avg+"%";
+  document.getElementById("progressList").innerHTML=state.promises.map(p=>`<div class="card progress-box">
+    <div class="progress-row"><b>${esc(p.title)}</b><span>${+p.progress||0}%</span></div>
+    <div class="bar"><i style="width:${+p.progress||0}%"></i></div>
+    <div class="copy">${esc(p.short)}</div>
+  </div>`).join("");
+}
+function renderOpinion(){
+  document.getElementById("opinionTitle").textContent=state.opinionTitle;
+  document.getElementById("opinionDesc").textContent=state.opinionDesc;
+  const f=document.getElementById("formLink");
+  f.href=state.formUrl||"javascript:void(0)";
+  f.onclick=state.formUrl?null:()=>toast("관리자 모드에서 Google Form 링크를 입력하세요");
+  const s=document.getElementById("sheetLink");
+  s.href=state.sheetUrl||"#";
+  s.style.display=state.sheetUrl?"inline-flex":"none";
+}
+function login(){
+  if(document.getElementById("pw").value==="2026"){document.getElementById("loginBox").style.display="none";document.getElementById("adminContent").style.display="block";renderAdmin();toast("관리자 모드입니다")}
+  else toast("비밀번호가 맞지 않습니다")
+}
+function tab(id,btn){document.querySelectorAll(".admin-box").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".admin-tabs button").forEach(x=>x.classList.remove("active"));btn.classList.add("active")}
+function renderAdmin(){
+  document.getElementById("adminTabs").innerHTML=[
+    ["adminHome","홈"],["adminPromises","공약"],["adminRoadmap","계획"],["adminOpinion","의견"],["adminTheme","테마"]
+  ].map((t,i)=>`<button class="${i===0?'active':''}" onclick="tab('${t[0]}',this)">${t[1]}</button>`).join("");
+  document.getElementById("adminHome").innerHTML=`
+    <div class="admin-item">
+      <div class="field"><label>메인 제목</label><input value="${esc(state.heroTitle)}" oninput="state.heroTitle=this.value"></div>
+      <div class="field"><label>메인 설명</label><textarea oninput="state.heroSubtitle=this.value">${esc(state.heroSubtitle)}</textarea></div>
+      <div class="field"><label>키워드(쉼표로 구분)</label><input value="${esc(state.keywords.join(','))}" oninput="state.keywords=this.value.split(',').map(x=>x.trim()).filter(Boolean)"></div>
+      <button class="btn blue" onclick="persist()">저장</button>
+    </div>`;
+  document.getElementById("adminPromises").innerHTML=`<button class="btn blue" onclick="addPromise()">공약 추가</button>`+state.promises.map((p,i)=>`
+    <div class="admin-item">
+      <div class="row"><button class="small" onclick="movePromise(${i},-1)">위로</button><button class="small" onclick="movePromise(${i},1)">아래로</button><button class="small" onclick="copyPromise(${i})">복사</button><button class="small danger" onclick="delPromise(${i})">삭제</button></div>
+      <div class="field"><label>분류</label><input value="${esc(p.cat)}" oninput="state.promises[${i}].cat=this.value"></div>
+      <div class="field"><label>공약명</label><input value="${esc(p.title)}" oninput="state.promises[${i}].title=this.value"></div>
+      <div class="field"><label>짧은 설명</label><textarea oninput="state.promises[${i}].short=this.value">${esc(p.short)}</textarea></div>
+      <div class="field"><label>문제 인식</label><textarea oninput="state.promises[${i}].problem=this.value">${esc(p.problem)}</textarea></div>
+      <div class="field"><label>핵심 약속</label><textarea oninput="state.promises[${i}].promise=this.value">${esc(p.promise)}</textarea></div>
+      <div class="field"><label>실행계획(줄바꿈)</label><textarea oninput="state.promises[${i}].steps=this.value.split('\\n').filter(Boolean)">${esc((p.steps||[]).join('\n'))}</textarea></div>
+      <div class="field"><label>측정지표(줄바꿈)</label><textarea oninput="state.promises[${i}].metrics=this.value.split('\\n').filter(Boolean)">${esc((p.metrics||[]).join('\n'))}</textarea></div>
+      <div class="field"><label>진행률 %</label><input type="number" min="0" max="100" value="${+p.progress||0}" oninput="state.promises[${i}].progress=Number(this.value)"></div>
+      <button class="btn blue" onclick="persist()">저장</button>
+    </div>`).join("");
+  document.getElementById("adminRoadmap").innerHTML=`<button class="btn blue" onclick="addRoadmap()">단계 추가</button>`+state.roadmap.map((r,i)=>`
+    <div class="admin-item">
+      <div class="row"><button class="small danger" onclick="state.roadmap.splice(${i},1);persist()">삭제</button></div>
+      <div class="field"><label>시기</label><input value="${esc(r.time)}" oninput="state.roadmap[${i}].time=this.value"></div>
+      <div class="field"><label>내용</label><textarea oninput="state.roadmap[${i}].text=this.value">${esc(r.text)}</textarea></div>
+      <button class="btn blue" onclick="persist()">저장</button>
+    </div>`).join("");
+  document.getElementById("adminOpinion").innerHTML=`
+    <div class="admin-item">
+      <div class="field"><label>의견광장 제목</label><input value="${esc(state.opinionTitle)}" oninput="state.opinionTitle=this.value"></div>
+      <div class="field"><label>의견광장 설명</label><textarea oninput="state.opinionDesc=this.value">${esc(state.opinionDesc)}</textarea></div>
+      <div class="field"><label>Google Form 제출 링크</label><input placeholder="https://forms.gle/..." value="${esc(state.formUrl)}" oninput="state.formUrl=this.value"></div>
+      <div class="field"><label>Google Sheet 관리자 확인 링크</label><input placeholder="https://docs.google.com/spreadsheets/..." value="${esc(state.sheetUrl)}" oninput="state.sheetUrl=this.value"></div>
+      <button class="btn blue" onclick="persist()">저장</button>
+    </div>`;
+  document.getElementById("adminTheme").innerHTML=`
+    <div class="admin-item">
+      <div class="field"><label>메인 색상</label><input type="color" value="${state.theme.blue}" oninput="state.theme.blue=this.value"></div>
+      <div class="field"><label>진한 색상</label><input type="color" value="${state.theme.blue2}" oninput="state.theme.blue2=this.value"></div>
+      <div class="field"><label>강조 색상</label><input type="color" value="${state.theme.yellow}" oninput="state.theme.yellow=this.value"></div>
+      <div class="field"><label>글자 크기</label><input type="range" min=".9" max="1.15" step=".01" value="${state.theme.fontScale}" oninput="state.theme.fontScale=Number(this.value)"></div>
+      <button class="btn blue" onclick="persist()">저장</button>
+    </div>`;
+}
+function addPromise(){state.promises.push({cat:"새공약",title:"새 공약",short:"짧은 설명",problem:"문제 인식",promise:"핵심 약속",steps:["1단계 실행"],metrics:["측정지표"],progress:0});persist()}
+function delPromise(i){if(confirm("삭제할까요?")){state.promises.splice(i,1);persist()}}
+function copyPromise(i){state.promises.splice(i+1,0,JSON.parse(JSON.stringify(state.promises[i])));persist()}
+function movePromise(i,d){const j=i+d;if(j<0||j>=state.promises.length)return;[state.promises[i],state.promises[j]]=[state.promises[j],state.promises[i]];persist()}
+function addRoadmap(){state.roadmap.push({time:"시기",text:"실행 내용"});persist()}
+function copyBackup(){navigator.clipboard.writeText(JSON.stringify(state,null,2)).then(()=>toast("백업이 복사되었습니다"))}
+function restoreBackup(){const t=prompt("백업 내용을 붙여넣으세요"); if(!t)return; try{state=JSON.parse(t);persist()}catch(e){toast("백업 형식이 맞지 않습니다")}}
+function resetAll(){if(confirm("초기화할까요?")){localStorage.removeItem("unionAppV9");state=structuredClone(DEFAULT);render();toast("초기화되었습니다")}}
+render();
+</script>
 </body>
 </html>
