@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#071f54" />
+  <title>중앙회노조 ON - 선거 홍보 웹앱</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="주 메뉴">
+      <div class="brand">
+        <div class="brand-mark">ON</div>
+        <div>
+          <strong id="brandName"></strong>
+          <span id="brandSub"></span>
+        </div>
+      </div>
+      <nav class="side-nav">
+        <button class="nav active" data-view="home">홈</button>
+        <button class="nav" data-view="transfer">전보</button>
+        <button class="nav" data-view="hr">인사·승진</button>
+        <button class="nav" data-view="committee">위원회</button>
+        <button class="nav" data-view="live">교섭 라이브</button>
+        <button class="nav" data-view="voice">의견광장</button>
+        <button class="nav" data-view="pledges">이행률</button>
+        <button class="nav" data-view="admin">관리자</button>
+      </nav>
+      <div class="consult-box">
+        <strong>언제든 말할 수 있는 공간</strong>
+        <p>전보·인사·승진·업무고충을 안전하게 남겨주세요.</p>
+        <button data-open-voice>의견 남기기</button>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <button class="hamburger" id="menuToggle" aria-label="메뉴 열기">☰</button>
+        <div>
+          <p class="eyebrow" id="eyebrow"></p>
+          <h1 id="mainTitle"></h1>
+        </div>
+        <button class="admin-quick" data-view-jump="admin">관리자</button>
+      </header>
+
+      <section class="campaign-hero" id="homeHero">
+        <div class="hero-copy">
+          <div class="slogan-chip" id="heroChip"></div>
+          <h2 id="heroTitle"></h2>
+          <p id="heroText"></p>
+          <div class="hero-actions">
+            <button class="primary" data-view-jump="voice">지금 의견 남기기</button>
+            <button class="secondary" data-view-jump="pledges">이행률 보기</button>
+          </div>
+        </div>
+        <div class="hero-score-card">
+          <p class="mini-label">공약 이행률</p>
+          <strong id="overallPercent">0%</strong>
+          <div class="big-bar"><span id="overallBar"></span></div>
+          <p id="overallText"></p>
+          <button class="white-btn" data-view-jump="pledges">세부 이행률 확인</button>
+        </div>
+      </section>
+
+      <section class="view active" id="view-home">
+        <div class="one-page-summary">
+          <div class="summary-head">
+            <span>한 장 요약</span>
+            <h2 id="summaryTitle"></h2>
+            <p id="summaryLead"></p>
+          </div>
+          <div class="summary-grid" id="summaryCards"></div>
+        </div>
+
+        <div class="section-head compact">
+          <h2>핵심 전략</h2>
+          <p>듣고, 측정하고, 설계하고, 실행하고, 공개하고, 개선하겠습니다.</p>
+        </div>
+        <div class="grid three" id="strategyCards"></div>
+
+        <div class="panel split">
+          <div>
+            <h2>100일 실행 로드맵</h2>
+            <ul class="timeline" id="roadmapList"></ul>
+          </div>
+          <div>
+            <h2>공개 지표</h2>
+            <div class="metrics" id="metricsList"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-transfer">
+        <div class="section-head">
+          <h2 id="transferTitle"></h2>
+          <p id="transferLead"></p>
+        </div>
+        <div class="grid two" id="transferPromises"></div>
+      </section>
+
+      <section class="view" id="view-hr">
+        <div class="section-head">
+          <h2 id="hrTitle"></h2>
+          <p id="hrLead"></p>
+        </div>
+        <div class="grid two" id="hrPromises"></div>
+      </section>
+
+      <section class="view" id="view-committee">
+        <div class="section-head">
+          <h2 id="committeeTitle"></h2>
+          <p id="committeeLead"></p>
+        </div>
+        <div class="grid two" id="committeeList"></div>
+      </section>
+
+      <section class="view" id="view-live">
+        <div class="section-head">
+          <h2 id="liveTitle"></h2>
+          <p id="liveLead"></p>
+        </div>
+        <div class="live-board" id="liveBoard"></div>
+      </section>
+
+      <section class="view" id="view-voice">
+        <div class="section-head">
+          <h2 id="voiceTitle"></h2>
+          <p id="voiceLead"></p>
+        </div>
+        <div id="externalVoiceBox" class="external-voice-box hidden"></div>
+        <form id="voiceForm" class="voice-form">
+          <label>분류
+            <select id="voiceCategory">
+              <option>전보 고충</option>
+              <option>인사·평가</option>
+              <option>승진 기준</option>
+              <option>위원회 제안</option>
+              <option>교섭 의제</option>
+              <option>조합 운영</option>
+              <option>긴급 상담</option>
+              <option>자유 의견</option>
+            </select>
+          </label>
+          <label>공개 범위
+            <select id="voiceScope">
+              <option>익명 제안</option>
+              <option>비공개 상담</option>
+              <option>공개 제안</option>
+            </select>
+          </label>
+          <label>의견 내용
+            <textarea id="voiceText" maxlength="800" placeholder="전보, 인사, 승진, 위원회 제안, 조합 운영 등 무엇이든 남겨주세요." required></textarea>
+          </label>
+          <button class="primary" type="submit">의견 보내기</button>
+        </form>
+        <div class="sub-panel">
+          <h3>접수된 의견</h3>
+          <div id="voiceList"></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-pledges">
+        <div class="section-head pledge-header">
+          <div>
+            <h2 id="pledgeTitle"></h2>
+            <p id="pledgeLead"></p>
+          </div>
+          <div class="pledge-total">
+            <span>전체 이행률</span>
+            <strong id="pledgeTotalText">0%</strong>
+          </div>
+        </div>
+        <div id="pledgeList"></div>
+      </section>
+
+      <section class="view" id="view-admin">
+        <div class="section-head">
+          <h2>관리자 모드</h2>
+          <p>비밀번호 입력 후 화면에 보이는 문구와 카드를 직접 수정할 수 있습니다. 코드 작업이 필요 없습니다.</p>
+        </div>
+        <div id="loginBox" class="admin-box">
+          <input id="adminPw" type="password" inputmode="numeric" placeholder="관리자 비밀번호" />
+          <button class="primary" id="loginBtn">관리자 로그인</button>
+        </div>
+        <div id="adminPanel" class="admin-panel hidden">
+          <div class="admin-toolbar">
+            <strong>수정할 화면 선택</strong>
+            <div class="admin-tabs" id="adminTabs"></div>
+          </div>
+          <div id="adminEditor"></div>
+          <div class="admin-actions sticky-actions">
+            <button class="primary" id="saveAdmin">저장하기</button>
+            <button class="secondary" id="previewHome">홈 미리보기</button>
+            <button class="danger" id="resetData">초기화</button>
+          </div>
+          <p class="hint">현재 버전은 브라우저에 저장됩니다. 같은 내용을 여러 기기에서 공유하려면 GitHub Pages, Netlify, Firebase, Supabase, Google Sheets 연동형으로 확장하면 됩니다.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <nav class="bottom-nav" aria-label="모바일 하단 메뉴">
+    <button class="mobile-nav active" data-view="home">홈</button>
+    <button class="mobile-nav" data-view="pledges">이행률</button>
+    <button class="mobile-nav" data-view="live">라이브</button>
+    <button class="mobile-nav" data-view="voice">의견</button>
+    <button class="mobile-nav" data-view="admin">관리</button>
+  </nav>
+
+  <script src="app.js"></script>
+</body>
+</html>
